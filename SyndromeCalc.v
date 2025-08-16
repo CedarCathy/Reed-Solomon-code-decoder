@@ -1,16 +1,16 @@
 module SyndromeCalc#(
-    parameter n = 255,  //data frame length
-    parameter k = 239,  //valid message length
-    parameter t = 8,    //decoder can only correct less than 8 error symbols
-    parameter m = 8     //data width
+    parameter n = 255,  //data frame length，数据帧长度
+    parameter k = 239,  //valid message length，有效信息长度
+    parameter t = 8,    //decoder can only correct less than 8 error symbols，译码器对单帧数据至多纠正8个错误码元
+    parameter m = 8     //data width，数据位宽
 )
 (
-    input  wire           clk_in,      //system clock
-    input  wire           sync,        //data sychronisation signal,valid when it's low
-    input  wire [m-1 : 0] data_in,     //data received,contains error symbols
+    input  wire           clk_in,      //system clock，系统时钟，设计工作频率在125MHz
+    input  wire           sync,        //data sychronisation signal,valid when it's low，数据同步信号
+    input  wire [m-1 : 0] data_in,     //data received,contains error symbols，接收数据
 
-    output reg  [m-1 : 0] Syndrome_out, //Syndrome output(serially,using 2t = 16 clock periods in total)
-    output reg            Scalc_done    //1: Syndrome calculation finished for current data frame
+    output reg  [m-1 : 0] Syndrome_out, //Syndrome output in reverse order(serially,using 2t = 16 clock periods in total)，反序串行输出的伴随子
+    output reg            Scalc_done    //1: Syndrome calculation finished for current data frame，伴随子计算完成标志
     );
 
     reg  [m-1 : 0] Syndrome            [2*t : 1];
@@ -19,6 +19,7 @@ module SyndromeCalc#(
     wire [m-1 : 0] data_alpha_pow_j    [2*t : 1];
 
 	//Serial machine counter
+	//序列机计数器
     always @(posedge clk_in) begin
         if (sync == 1'b1) begin
             Serial_machine_cnt <= 8'd0;
@@ -36,6 +37,7 @@ module SyndromeCalc#(
     always @(posedge clk_in) begin
     	if (sync == 1'b1) begin
 			//syndrome initialization
+			//初始化伴随子
     		Syndrome [1]  <= 8'd0;
     		Syndrome [2]  <= 8'd0;
     		Syndrome [3]  <= 8'd0;
@@ -74,6 +76,7 @@ module SyndromeCalc#(
     		end
     		else begin
 				//syndrome iteration calculation
+				//伴随子的迭代计算
     			Syndrome [1]  <= data_in ^ data_alpha_pow_j [1];
     			Syndrome [2]  <= data_in ^ data_alpha_pow_j [2];
     			Syndrome [3]  <= data_in ^ data_alpha_pow_j [3];
@@ -95,7 +98,8 @@ module SyndromeCalc#(
     end
 
     //utility of constant multipliers on GF(2^m)
-	//S[j]=R[0]+a^j(R[1]+a^j(R[2]+...+a^j(R[n-2]+R[n-1]*a^j)...)),S:Syndrome;R:data_in
+	//例化有限域常数乘法器实现嵌套乘alpha^j
+	//S[j]=R[0]+a^j(R[1]+a^j(R[2]+...+a^j(R[n-2]+R[n-1]*a^j)...)),S:Syndrome;R:data_in,a:alpha
     GF_constMul #(.dual_const(15'h4405)) data_alpha_pow_1 (.mul_numA(Syndrome[1]), .prod(data_alpha_pow_j[1] ));  //a^0  = 8'd1   --> 15'h4405
     GF_constMul #(.dual_const(15'h6202)) data_alpha_pow_2 (.mul_numA(Syndrome[2]), .prod(data_alpha_pow_j[2] ));  //a^1  = 8'd2   --> 15'h6202
     GF_constMul #(.dual_const(15'h7101)) data_alpha_pow_3 (.mul_numA(Syndrome[3]), .prod(data_alpha_pow_j[3] ));  //a^2  = 8'd4   --> 15'h7101
@@ -123,6 +127,7 @@ module SyndromeCalc#(
     end
 
 	//parallel to serial for syndrome output
+	//伴随子串行输出
 	reg  [m-1 : 0] Syndrome_shift_reg  [2*t : 1];
     always @(posedge sys_clk) begin
     	if (Serial_machine_cnt == 8'd1) begin
