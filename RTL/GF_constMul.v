@@ -1,5 +1,7 @@
 module GF_constMul #(
-    parameter dual_const=15'h0//弱对偶基表示的有限域常数
+    parameter dual_const=15'h0
+    //constant represented by weak dual basis on GF(2^m)
+    //弱对偶基表示的有限域常数
 )
 (
     input  wire [7 : 0] mul_numA,

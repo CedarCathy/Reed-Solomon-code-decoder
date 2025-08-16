@@ -178,7 +178,7 @@ module Forney#(
         end
     end
 
-    always@(posedge sys_clk)begin:dLambda_Calc
+    always@(posedge clk_in)begin:dLambda_Calc
     	if(ECalc_start)begin
     		diff_Lambda[0] <= Lambda_odd[0];
     		diff_Lambda[1] <= Lambda_odd[1];

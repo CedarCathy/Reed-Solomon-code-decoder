@@ -27,7 +27,7 @@ module Chien_Search#(
     wire [m-1 : 0] Lambda_alpha_pow_minus_i [t : 1];
     reg  [  8 : 0] Serial_machine_cnt;
 
-    always@(posedge sys_clk)begin
+    always@(posedge clk_in)begin
     	if (Scalc_done) begin
     		Serial_machine_cnt <= 1'b1;
     	end
@@ -36,7 +36,7 @@ module Chien_Search#(
     	end
     end
 
-    always @(posedge sys_clk)begin:Chien
+    always @(posedge clk_in)begin:Chien
     	if(sys_rst_n == 1'b0)begin
     		Lambda[0] <= 8'd1;		
     		Lambda[1] <= 8'd0;
