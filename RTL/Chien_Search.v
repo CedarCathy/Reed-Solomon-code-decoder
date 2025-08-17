@@ -101,19 +101,14 @@ module Chien_Search#(
     	end
     end
     always @(posedge clk_in) begin
-    	if(BM_done == 1'b1)begin
+    	if((end_operation_cnt == 4'd14) && (Error_symbol == 1'b1))begin
+    		End_Error_symbol <= 1'b1;
+    	end
+    	else if ((end_operation_cnt == 4'd14) && (Error_symbol == 1'b0)) begin
     		End_Error_symbol <= 1'b0;
     	end
     	else begin
-    		if((end_operation_cnt == 4'd14) && (Error_symbol == 1'b1))begin
-    			End_Error_symbol <= 1'b1;
-    		end
-    		else if ((end_operation_cnt == 4'd14) && (Error_symbol == 1'b0)) begin
-    			End_Error_symbol <= 1'b0;
-    		end
-    		else begin
-    			End_Error_symbol <= End_Error_symbol;
-    		end
+    		End_Error_symbol <= End_Error_symbol;
     	end
     end
 endmodule

@@ -42,7 +42,7 @@ module Forney#(
             frame_start_flag <= 1'b0;
         end
         else begin
-            frame_start_flag <= 1'b0;
+            frame_start_flag <= frame_start_flag;
         end
     end
 

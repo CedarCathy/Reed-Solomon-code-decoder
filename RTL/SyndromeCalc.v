@@ -173,7 +173,7 @@ module SyndromeCalc#(
         if (Serial_machine_cnt == n) begin
             shift_out_cnt <= 5'd1;
         end
-        else if ((shift_out_cnt > 5'd1) && (shift_out_cnt < 5'd16)) begin
+        else if ((shift_out_cnt >= 5'd1) && (shift_out_cnt <= 5'd16)) begin
             shift_out_cnt <= shift_out_cnt + 1'b1;
         end
         else begin
