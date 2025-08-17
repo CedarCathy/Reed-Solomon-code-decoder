@@ -7,7 +7,7 @@ module GF_mul#(
 	output reg  [m-1 : 0] prod
 );
 reg [2*m-2 : 0] B_dual;//乘数B的对偶基表示
-reg [2*m-2 : 0] prod_dual;//乘积的对偶基表示
+reg [m-1   : 0] prod_dual;//乘积的对偶基表示
 
 always @(mul_A or mul_B)begin
 	//乘数B从多项式基变换到弱对偶基

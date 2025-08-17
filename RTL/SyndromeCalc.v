@@ -129,7 +129,7 @@ module SyndromeCalc#(
 	//parallel to serial for syndrome output
 	//伴随子串行输出
 	reg  [m-1 : 0] Syndrome_shift_reg  [2*t : 1];
-    always @(posedge sys_clk) begin
+    always @(posedge clk_in) begin
     	if (Serial_machine_cnt == 8'd1) begin
     		Syndrome_shift_reg [1]  <= Syndrome [1];
     		Syndrome_shift_reg [2]  <= Syndrome [2];

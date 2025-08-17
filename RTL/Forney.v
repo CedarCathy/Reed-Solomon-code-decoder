@@ -6,7 +6,6 @@ module Forney#(
 )
 (
     input  wire           clk_in,
-    input  wire           sys_rst_n,
     input  wire           BM_done,
     input  wire           Scalc_done,
  
@@ -135,19 +134,14 @@ module Forney#(
     GF_constMul #(.dual_const(15'h181D)) Omega_a8  (.mul_numA(Omega_reg[7]),.prod(Omega_alpha[7]));//Omega7*a^23      15'h11C4
 
     always @(posedge clk_in) begin
-        if(sys_rst_n == 1'b0)begin
-            Omega_alpha_pow_minus_i <= 8'd0;
-        end
-        else begin
-            Omega_alpha_pow_minus_i <= Omega_reg[0] ^
-                                       Omega_reg[1] ^
-                                       Omega_reg[2] ^
-                                       Omega_reg[3] ^
-                                       Omega_reg[4] ^
-                                       Omega_reg[5] ^
-                                       Omega_reg[6] ^
-                                       Omega_reg[7];
-        end
+        Omega_alpha_pow_minus_i <= Omega_reg[0] ^
+                                   Omega_reg[1] ^
+                                   Omega_reg[2] ^
+                                   Omega_reg[3] ^
+                                   Omega_reg[4] ^
+                                   Omega_reg[5] ^
+                                   Omega_reg[6] ^
+                                   Omega_reg[7];
     end
 
     reg  [m-1 : 0] Omega_ai_delay1;
@@ -199,27 +193,23 @@ module Forney#(
     GF_constMul #(.dual_const(15'h2388)) dLambda_a6(.mul_numA(diff_Lambda[3]),.prod(diff_Lambda_alpha[3]));
 
     always @(posedge clk_in) begin
-        if(sys_rst_n == 1'b0)begin
-            diff_Lambda_alpha_pow_minus_i <= 8'd0;
-        end
-        else begin
-            diff_Lambda_alpha_pow_minus_i <= diff_Lambda[0] ^
-                                             diff_Lambda[1] ^
-                                             diff_Lambda[2] ^
-                                             diff_Lambda[3];
-        end
+        diff_Lambda_alpha_pow_minus_i <= diff_Lambda[0] ^
+                                         diff_Lambda[1] ^
+                                         diff_Lambda[2] ^
+                                         diff_Lambda[3];
     end
 
     wire [m-1 : 0] inv_dLambda_ai;
     ROM_INV inv_dLambda(
         .clka(clk_in),
         .addra(diff_Lambda_alpha_pow_minus_i),
+        .ena(1'b1),
 
         .douta(inv_dLambda_ai)
     );
 
     GF_mul_clk AlphaOmega_invdLambda(
-        .sys_clk(clk_in),
+        .clk_in(clk_in),
         .mul_A(Omega_ai_delay2),
         .mul_B(inv_dLambda_ai),
 

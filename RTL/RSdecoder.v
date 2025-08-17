@@ -7,7 +7,6 @@ module RSdecoder#(
 )
 (
     input  wire           clk_in,       //system clock
-    input  wire           sys_rst_n,    //reset signal
     input  wire           sync,         //data sychronisation signal,valid when it's low
     input  wire [m-1 : 0] data_in,      //data received,contains error symbols
 
@@ -92,7 +91,6 @@ module RSdecoder#(
 
     Forney Forney_U(
         .clk_in(clk_in),
-        .sys_rst_n(sys_rst_n),
         .BM_done(BM_done),
         .Scalc_done(Scalc_done),
     
@@ -127,8 +125,8 @@ module RSdecoder#(
         .Error_approx(Error_approx),
         .Error_approx_latch(Error_approx_latch),
         .end_operation_cnt(end_operation_cnt),
-        .Error_Symbol(Error_symbol),
-        .End_Error_Symbol(End_Error_symbol),
+        .Error_symbol(Error_symbol),
+        .End_Error_symbol(End_Error_symbol),
 
         
         .data_out(data_out)

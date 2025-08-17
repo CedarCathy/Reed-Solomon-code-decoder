@@ -99,7 +99,7 @@ module Reformulated_BM#(
 	always @(posedge clk_in)begin
 		if (Scalc_done == 1'b1) begin
 			//Syndrome_buffer initialization after syndrome calculation completed
-			Syndrome_buffer[1] <= Syndrome;
+			Syndrome_buffer[1] <= Syndrome_out;
 			Syndrome_buffer[2] <= 8'd0;
 			Syndrome_buffer[3] <= 8'd0;
 			Syndrome_buffer[4] <= 8'd0;
@@ -111,7 +111,7 @@ module Reformulated_BM#(
 		end
 		else begin
 			//Shift in syndrome data from module SyndromeCalc
-			Syndrome_buffer[1] <= Syndrome;
+			Syndrome_buffer[1] <= Syndrome_out;
 			Syndrome_buffer[2] <= Syndrome_buffer[1];
 			Syndrome_buffer[3] <= Syndrome_buffer[2];
 			Syndrome_buffer[4] <= Syndrome_buffer[3];

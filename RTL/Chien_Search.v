@@ -37,40 +37,27 @@ module Chien_Search#(
     end
 
     always @(posedge clk_in)begin:Chien
-    	if(sys_rst_n == 1'b0)begin
-    		Lambda[0] <= 8'd1;		
-    		Lambda[1] <= 8'd0;
-    		Lambda[2] <= 8'd0;
-    		Lambda[3] <= 8'd0;
-    		Lambda[4] <= 8'd0;
-    		Lambda[5] <= 8'd0;
-    		Lambda[6] <= 8'd0;
-    		Lambda[7] <= 8'd0;
-    		Lambda[8] <= 8'd0;		
+    	if(BM_done && (Serial_machine_cnt == 9'd17))begin
+    		Lambda[0] <= Lambda0;		
+    		Lambda[1] <= Lambda1;
+    		Lambda[2] <= Lambda2;
+    		Lambda[3] <= Lambda3;
+    		Lambda[4] <= Lambda4;
+    		Lambda[5] <= Lambda5;
+    		Lambda[6] <= Lambda6;
+    		Lambda[7] <= Lambda7;
+    		Lambda[8] <= Lambda8;		
     	end
     	else begin
-    		if(BM_done&&(cnt==9'd17))begin
-    			Lambda[0] <= Lambda0;		
-    			Lambda[1] <= Lambda1;
-    			Lambda[2] <= Lambda2;
-    			Lambda[3] <= Lambda3;
-    			Lambda[4] <= Lambda4;
-    			Lambda[5] <= Lambda5;
-    			Lambda[6] <= Lambda6;
-    			Lambda[7] <= Lambda7;
-    			Lambda[8] <= Lambda8;		
-    		end
-    		else begin
-                Lambda[0] <= Lambda[0];
-                Lambda[1] <= Lambda_alpha_pow_minus_i[1];
-                Lambda[2] <= Lambda_alpha_pow_minus_i[2];
-                Lambda[3] <= Lambda_alpha_pow_minus_i[3];
-                Lambda[4] <= Lambda_alpha_pow_minus_i[4];
-                Lambda[5] <= Lambda_alpha_pow_minus_i[5];
-                Lambda[6] <= Lambda_alpha_pow_minus_i[6];
-                Lambda[7] <= Lambda_alpha_pow_minus_i[7];
-                Lambda[8] <= Lambda_alpha_pow_minus_i[8];               
-    		end
+            Lambda[0] <= Lambda[0];
+            Lambda[1] <= Lambda_alpha_pow_minus_i[1];
+            Lambda[2] <= Lambda_alpha_pow_minus_i[2];
+            Lambda[3] <= Lambda_alpha_pow_minus_i[3];
+            Lambda[4] <= Lambda_alpha_pow_minus_i[4];
+            Lambda[5] <= Lambda_alpha_pow_minus_i[5];
+            Lambda[6] <= Lambda_alpha_pow_minus_i[6];
+            Lambda[7] <= Lambda_alpha_pow_minus_i[7];
+            Lambda[8] <= Lambda_alpha_pow_minus_i[8];               
     	end
     end
 
@@ -114,7 +101,7 @@ module Chien_Search#(
     	end
     end
     always @(posedge clk_in) begin
-    	if(sys_rst_n == 1'b0)begin
+    	if(BM_done == 1'b1)begin
     		End_Error_symbol <= 1'b0;
     	end
     	else begin
